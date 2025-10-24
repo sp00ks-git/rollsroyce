@@ -57,9 +57,12 @@ router.post('/login', async (req, res) => {
       },
     };
 
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).send('Server error: JWT_SECRET not configured');
+    }
     jwt.sign(
       payload,
-      'your_jwt_secret', // Replace with an environment variable
+      process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
